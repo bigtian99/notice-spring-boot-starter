@@ -1,0 +1,18 @@
+#html存放的具体路径，可进行自定义，示例：resources/templates
+bigtian:
+  secret: SEC785a40c0b2db7effb4a1330b063f000ee5b55406a246f6903f1cf157bbbe0506 #目前只支持群机器人为加密方式
+  token: 71bacd464f9837753f7da57c102eba040c1ec59c4146e6a86d091536866803d1 #机器人token
+  #  title: 异常提醒 #异常提醒标题
+  #  atAll: true #是否at全体群人员
+  #  managers: 294646182020138624 #项目管理这的userId,如果配置则默认每次发送异常信息都会at,如果多个请求英文逗号分割
+  envs: #配置该项是为了在钉钉群中区分异常属于那个环境
+    dev: 开发环境 #默认第一个为开发环境
+    test: 测试环境
+    prod: 正式环境
+  developers: #格式为：开发者的笔名:钉钉的userId
+    bigtian: 294646182020138624
+  packet: execution(* club.bigtian.notice..*(..))
+  projectName: CRM
+mybatis: #需在引入的项目中配置下方路径
+  mapper-locations: classpath*:/mappers/**/*.xml
+

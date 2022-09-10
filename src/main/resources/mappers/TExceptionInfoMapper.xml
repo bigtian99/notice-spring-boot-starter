@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.bigtian.notice.mapper.TExceptionInfoMapper">
+    <resultMap id="BaseResultMap" type="club.bigtian.notice.domain.TExceptionInfo">
+        <!--@mbg.generated-->
+        <!--@Table t_exception_info-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="handled" jdbcType="VARCHAR" property="handled"/>
+        <result column="handled_time" jdbcType="TIMESTAMP" property="handledTime"/>
+        <result column="handled_man" jdbcType="VARCHAR" property="handledMan"/>
+        <result column="cause" jdbcType="VARCHAR" property="cause"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        url,
+        content,
+        create_time,
+        handled,
+        handled_time,
+        handled_man,
+        cause
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from t_exception_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from t_exception_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="club.bigtian.notice.domain.TExceptionInfo"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into t_exception_info (url, content, create_time,
+                                      handled, handled_time, handled_man)
+        values (#{url,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{handled,jdbcType=VARCHAR}, #{handledTime,jdbcType=TIMESTAMP}, #{handledMan,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="club.bigtian.notice.domain.TExceptionInfo" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into t_exception_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="url != null">
+                url,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="handled != null">
+                handled,
+            </if>
+            <if test="handledTime != null">
+                handled_time,
+            </if>
+            <if test="handledMan != null">
+                handled_man,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="handled != null">
+                #{handled,jdbcType=VARCHAR},
+            </if>
+            <if test="handledTime != null">
+                #{handledTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="handledMan != null">
+                #{handledMan,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="club.bigtian.notice.domain.TExceptionInfo">
+        <!--@mbg.generated-->
+        update t_exception_info
+        <set>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="handled != null">
+                handled = #{handled,jdbcType=VARCHAR},
+            </if>
+            <if test="handledTime != null">
+                handled_time = #{handledTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="handledMan != null">
+                handled_man = #{handledMan,jdbcType=VARCHAR},
+            </if>
+            <if test="cause != null">
+                cause = #{cause,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="club.bigtian.notice.domain.TExceptionInfo">
+        <!--@mbg.generated-->
+        update t_exception_info
+        set url          = #{url,jdbcType=VARCHAR},
+            content      = #{content,jdbcType=LONGVARCHAR},
+            create_time  = #{createTime,jdbcType=TIMESTAMP},
+            handled      = #{handled,jdbcType=VARCHAR},
+            handled_time = #{handledTime,jdbcType=TIMESTAMP},
+            handled_man  = #{handledMan,jdbcType=VARCHAR},
+            cause        = #{cause,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_exception_info
+        <where>
+            <if test="handled != null and handled != ''">
+                handled = #{handled}
+            </if>
+        </where>
+        order by handled, create_time desc
+        limit ${page},${limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(*)
+        from t_exception_info
+        <where>
+            <if test="handled != null and handled != ''">
+                handled = #{handled}
+            </if>
+        </where>
+    </select>
+
+    <select id="groupCount" resultType="java.util.Map">
+        select count(*) as `count`, handled as `status`
+        from t_exception_info t
+        group by handled
+    </select>
+</mapper>

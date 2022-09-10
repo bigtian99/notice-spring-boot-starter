@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>异常信息</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        pre {
+            color: white;
+        }
+
+        body {
+            background-color: #2B2B2B;
+            font-size: 18px;
+        }
+
+
+        form {
+            padding-top: 20px;
+        }
+
+        input {
+            width: 90% !important;
+        }
+
+        textarea {
+            width: 90% !important;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="layui-nav  " style="width: 100vw;position:fixed; top: 0px">
+    <div style="width: 30%;float: right;padding: 10px">
+        <a th:href="'/exception/list'" class="layui-btn">返回列表</a>
+        <button id="handled" type="button" class="layui-btn" th:if="${status!='Y'}">异常处理</button>
+        <button type="button" class="layui-btn" th:if="${status=='Y'}" disabled>已处理</button>
+    </div>
+
+</div>
+
+<!--th:text 为 Thymeleaf 属性，用于在展示文本-->
+<pre th:text="${errInfo}" style="margin-top: 60px!important;padding: 10px"></pre>
+
+<div id="form" style="display: none">
+    <form class="layui-form" action="" lay-filter="example">
+        <div class="layui-form-item">
+            <label class="layui-form-label">处理人</label>
+            <div class="layui-input-block">
+                <input type="text" name="handledMan" lay-verify="required" autocomplete="off" placeholder="请输入处理人"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">导致原因</label>
+            <div class="layui-input-block">
+
+                <textarea lay-verify="required" name="cause" placeholder="请输入导致原因"
+                          class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item ">
+            <button type="button" class="layui-btn layui-btn-primary layui-input-block" id="close">关闭</button>
+            <button type="button" class="layui-btn layui-input-block " lay-submit lay-filter="submit">提交</button>
+        </div>
+    </form>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+
+
+<script>
+    layui.use(['form', 'layer'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        var form = layui.form;
+        var active = {
+            notice: function () {
+                //示范一个公告层
+                layer.open({
+                    type: 1
+                    ,
+                    title: '异常处理' //不显示标题栏
+                    ,
+                    closeBtn: false
+                    ,
+                    area: '600px;'
+                    ,
+                    shade: 0.8
+                    ,
+                    id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    ,
+                    moveType: 1 //拖拽模式，0或者1
+                    ,
+                    content: $('#form')
+
+                });
+            }
+        };
+        var name = localStorage.getItem("name");
+        if (name !== null) {
+            form.val('example', {
+                "handledMan": name // "name": "value"
+            });
+        }
+        //提交
+        form.on('submit(submit)', function (data) {
+            var id = [[${id}]]
+            var data = data.field;
+            localStorage.setItem("name", data.handledMan)
+            data.id = id
+            $.ajax({
+                type: "POST",
+                url: '/exception/handler',
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=UTF-8",
+                success: function (data) {
+                    if (data) {
+                        layer.msg("处理成功", {icon: 1})
+                        setTimeout(() => {
+                            layer.closeAll()
+                            location.reload()
+                        }, 2000)
+                    } else {
+                        layer.msg("处理失败", {icon: 5})
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('#close').on('click', () => {
+            layer.closeAll()
+        })
+
+        $("#handled").on('click', function handled() {
+            active.notice()
+        })
+    });
+</script>
+</body>
+</html>

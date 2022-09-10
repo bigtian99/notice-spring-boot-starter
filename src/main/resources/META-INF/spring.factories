@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    club.bigtian.notice.config.DingTalkAutoConfiguration

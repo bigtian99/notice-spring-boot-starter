@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>异常信息</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding: 10px;
+        }
+
+        .count {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 20px;
+            color: white;
+        }
+
+        .click {
+            cursor: pointer;
+        }
+
+        .text {
+            font-weight: bold;
+            font-size: 20px;
+            padding: 10px 0 10px 10px;
+            color: white;
+        }
+
+        .layui-panel {
+            border-radius: 10px;
+        }
+
+        .page {
+            width: 100%;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 51px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row layui-col-space15 click">
+    <div class="layui-col-md4" id="all">
+        <div class="layui-panel" style="background-color:#845EC2">
+            <div class="text">总异常</div>
+            <div class="count" th:text="${groupCount.N+groupCount.Y}"></div>
+        </div>
+    </div>
+    <div class="layui-col-md4 click" id="no">
+        <div class="layui-panel " style="background-color:#D65DB1">
+            <div class="text">待处理</div>
+            <div class="count" th:text="${groupCount.N}"></div>
+
+        </div>
+    </div>
+    <div class="layui-col-md4 click" id="yes">
+        <div class="layui-panel" style="background-color:#00C9A7">
+            <div class="text">已处理</div>
+            <div class="count" th:text="${groupCount.Y}"></div>
+
+        </div>
+    </div>
+</div>
+<!--<table class="layui-table">-->
+<!--    <colgroup>-->
+<!--        <col width="150">-->
+<!--        <col width="200">-->
+<!--        <col>-->
+<!--    </colgroup>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>序号</th>-->
+<!--        <th>请求url</th>-->
+<!--        <th>是否处理</th>-->
+<!--        <th>产生时间</th>-->
+<!--        <th>处理人</th>-->
+<!--        <th>处理时间</th>-->
+<!--        <th>导致原因</th>-->
+<!--        <th>操作</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="item,itemStat : ${ list}">-->
+<!--        <td th:text="${itemStat.index+1}"></td>-->
+<!--        <td th:text="${item.url}"></td>-->
+<!--        <td th:text="${item.handled=='Y'?'是':'否'}" th:style="'color:'+${item.handled=='Y'?'green':'red'}"></td>-->
+<!--        <td th:text="${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>-->
+<!--        <td th:text="${item.handledMan}"></td>-->
+<!--        <td th:text="${#dates.format(item.handledTime, 'yyyy-MM-dd HH:mm:ss')}"></td>-->
+<!--        <td th:text="${item.cause}"></td>-->
+<!--        <td>-->
+<!--            <a th:href="'/exception/selectOne?id='+${item.id}" class="layui-btn">详情</a>-->
+<!--        </td>-->
+<!--    </tr>-->
+
+<!--    </tbody>-->
+<!--</table>-->
+
+<!--<div class="page">-->
+<!--    <div id="page"></div>-->
+<!--</div>-->
+<table id="demo" lay-filter="test"></table>
+
+<script th:src="@{/layui/layui.js}"></script>
+
+
+<script>
+
+    layui.use(['laypage', 'layer', 'table'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        var table = layui.table;
+
+//执行渲染
+        table.render({
+            even: true,
+            elem: '#demo' //指定原始表格元素选择器（推荐id选择器）
+            , height: '700px' //容器高度
+            , url: '/exception/index?page=1&limit=10'
+            , id: 'yes'
+            , page: true
+            , cols: [
+                [
+                    {field: 'id', title: '序号'},
+                    {field: 'url', title: '请求url'},
+                    {field: 'handled', title: '是否处理', templet: '#handled'},
+                    {field: 'createTime', title: '产生时间', templet: '#createTime'},
+                    {field: 'handledMan', title: '处理人'},
+                    {field: 'handledTime', title: '处理时间', templet: '#handledTime'},
+                    {field: 'cause', title: '导致原因'},
+                    {field: '#', title: '操作', templet: '#operation'},
+
+                ],
+            ]
+        });
+        $("#yes").on('click', function () {
+            //执行渲染
+            table.reload('yes', {
+                page: {curr: 1},
+
+                url: '/exception/index',
+                where: {
+                    handled: 'Y',
+                }
+            });
+        })
+        $("#no").on('click', function () {
+            table.reload('yes', {
+                page: {curr: 1},
+                url: '/exception/index',
+                where: {
+                    handled: 'N'
+                }
+            });
+        })
+
+        $("#all").on('click', function () {
+            table.reload('yes', {
+                page: {curr: 1},
+                url: '/exception/index',
+                where: {
+                    handled: ''
+                }
+            });
+        })
+    });
+</script>
+<script type="text/html" id="handled">
+    {{#  if(d.handled ==='Y'){ }}
+    <span style="color: green">是</span>
+    {{#  } else { }}
+    <span style="color: red">否</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="createTime">
+    {{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}
+</script>
+<script type="text/html" id="handledTime">
+    {{layui.util.toDateString(d.handledTime, 'yyyy-MM-dd HH:mm:ss')}}
+</script>
+
+<script type="text/html" id="operation">
+    <a href="/exception/selectOne?id={{=d.id}}" class="layui-btn">详情</a>
+</script>
+</body>
+</html>
