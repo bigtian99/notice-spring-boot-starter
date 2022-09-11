@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author bigtian
- * @Description: 钉钉消息通知，自动配置类
- * @date 2022/9/1010:37
  */
 @Configuration
 @ComponentScan(basePackages = {"club.bigtian.notice.*","club.bigtian.notice.mapper"})

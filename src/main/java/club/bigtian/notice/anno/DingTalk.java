@@ -4,8 +4,6 @@ import java.lang.annotation.*;
 
 /**
  * @author bigtian
- * @Description:
- * @date 2022/9/322:05
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

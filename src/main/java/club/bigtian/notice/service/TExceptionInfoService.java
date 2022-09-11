@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * @author bigtian
- * @Description: ${description}
- * @date 2022/9/215:22
  */
 public interface TExceptionInfoService {
 

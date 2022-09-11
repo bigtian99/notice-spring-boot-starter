@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author bigtian
- * @Description:
- * @date 2022/9/412:36
  */
 @Configuration
 public class AopConfig {

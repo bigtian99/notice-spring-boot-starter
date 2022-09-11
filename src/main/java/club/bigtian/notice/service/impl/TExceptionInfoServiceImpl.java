@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author bigtian
- * @Description: ${description}
- * @date 2022/9/215:22
  */
 @Service
 public class TExceptionInfoServiceImpl implements TExceptionInfoService {

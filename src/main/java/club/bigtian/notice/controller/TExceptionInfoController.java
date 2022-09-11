@@ -36,6 +36,7 @@ public class TExceptionInfoController {
      * 通过主键查询单条数据
      *
      * @param id 主键
+     * @param model 传输对象
      * @return 单条数据
      */
     @GetMapping("/selectOne")

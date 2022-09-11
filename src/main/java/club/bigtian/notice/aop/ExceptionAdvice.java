@@ -16,8 +16,6 @@ import java.util.*;
 
 /**
  * @author bigtian
- * @Description:
- * @date 2022/9/412:37
  */
 @Component
 public class ExceptionAdvice implements MethodInterceptor {
@@ -59,9 +57,9 @@ public class ExceptionAdvice implements MethodInterceptor {
      * 获取作者列表
      *
      * @param method
-     * @return
      * @author bigtian
      * @since 6.0
+     * @return List<String>
      */
     public static List<String> getAuthorList( Method method ) {
         List<String> list = new ArrayList<>();

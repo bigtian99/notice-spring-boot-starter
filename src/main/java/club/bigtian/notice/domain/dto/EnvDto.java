@@ -4,8 +4,6 @@ import lombok.Data;
 
 /**
  * @author bigtian
- * @Description:
- * @date 2022/9/221:52
  */
 @Data
 public class EnvDto {

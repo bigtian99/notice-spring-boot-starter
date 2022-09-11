@@ -64,10 +64,10 @@ public class DingTalkUtil {
     /**
      * 加密
      *
-     * @param timestamp
-     * @return
+     * @param timestamp 时间戳
      * @author bigtian
      * @since 6.0
+     * @return  void
      */
 
     public static String signature(Long timestamp) {
@@ -87,7 +87,6 @@ public class DingTalkUtil {
     /**
      * 发送md消息
      *
-     * @throws ApiException
      * @author bigtian
      * @since 6.0
      */

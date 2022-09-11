@@ -9,8 +9,6 @@ import java.util.Map;
 
 /**
  * @author bigtian
- * @Description:
- * @date 2022/9/214:11
  */
 @ConfigurationProperties(prefix = "bigtian")
 @Configuration

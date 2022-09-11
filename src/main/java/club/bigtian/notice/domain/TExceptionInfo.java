@@ -22,6 +22,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TExceptionInfo implements Serializable {
+    /**
+     * 自增id
+     */
     private Long id;
 
     /**

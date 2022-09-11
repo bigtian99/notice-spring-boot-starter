@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-    * @Description: ${description}
     * @author bigtian
-    * @date 2022/9/215:22
     */
 @Mapper
 public interface TExceptionInfoMapper {
