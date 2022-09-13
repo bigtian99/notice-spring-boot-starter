@@ -62,5 +62,10 @@ public class TExceptionInfo implements Serializable {
      */
     private String cause;
 
+    /**
+     * 请求参数
+     */
+    private String params;
+
     private static final long serialVersionUID = 1L;
 }

@@ -3,14 +3,13 @@ package club.bigtian.notice.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Map;
 
 /**
  * @author bigtian
  */
-@ConfigurationProperties(prefix = "bigtian")
+@ConfigurationProperties(prefix = "notice.dingtalk")
 @Configuration
 @Data
 public class DingTalkConfig {
@@ -53,13 +52,25 @@ public class DingTalkConfig {
      */
     Map<String, String> developers;
 
-    /**
-     * 需要监听的包路径
-     */
-    private String packet;
 
     /**
      * 项目名称，用于区分多个项目集成了，钉钉群是一个
      */
     private String projectName;
+
+    /**
+     * 排除异常路径（可以多个英文逗号隔开）
+     */
+    private String excludePacket;
+
+    /**
+     * 排除的异常（可以多个英文逗号隔开），可以和排除异常路径一起使用
+     */
+    private String excludeException;
+
+    /**
+     * 默认5s内同一个接口异常不会重复发送
+     */
+    private long timeout = 5;
+
 }

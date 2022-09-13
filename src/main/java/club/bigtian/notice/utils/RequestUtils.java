@@ -30,5 +30,16 @@ public class RequestUtils {
         return (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     }
 
+    /**
+     * 获取请求的路径
+     *
+     * @return
+     * @author bigtian
+     * @since 6.0
+     */
+    public static String getRequestPath() {
+        return getRequest().getRequestURI();
+    }
+
 
 }

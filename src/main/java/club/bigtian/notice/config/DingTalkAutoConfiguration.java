@@ -1,6 +1,5 @@
 package club.bigtian.notice.config;
 
-import club.bigtian.notice.aop.ExceptionAdvice;
 import club.bigtian.notice.mapper.TExceptionInfoMapper;
 import club.bigtian.notice.service.TExceptionInfoService;
 import club.bigtian.notice.service.impl.TExceptionInfoServiceImpl;

@@ -1,8 +1,10 @@
-package club.bigtian.notice.utils;
-
+package club.bigtian.notice.service.impl;
 
 import club.bigtian.notice.config.DingTalkConfig;
+import club.bigtian.notice.constant.SystemConstant;
 import club.bigtian.notice.domain.TExceptionInfo;
+import club.bigtian.notice.service.INoticeService;
+import club.bigtian.notice.utils.RequestUtils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
@@ -15,7 +17,8 @@ import com.taobao.api.ApiException;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.Mac;
@@ -26,25 +29,29 @@ import java.util.*;
 
 /**
  * @author bigtian
- * @Description: 钉钉消息发送工具类
- * @date 2022/9/213:51
+ * @Description: 钉钉消息发送类
+ * @date 2022/9/1210:38
  */
-@Component
-public class DingTalkUtil {
+@Service
+@Primary
+public class DingTalkServiceImpl implements INoticeService {
     @Autowired
-    private DingTalkConfig config2;
-    public static DingTalkConfig config;
+    private DingTalkConfig config;
 
     @Autowired
     private ApplicationContext context;
     private static String activeProfile;
 
     private static String urlPrefix;
-    public static final String URL = "/exception/selectOne?id=";
+
+    @Override
+    public void sendMessage(TExceptionInfo info, List<String> list) {
+        sendErrorMd(info.getId(), list);
+    }
+
 
     @PostConstruct
     public void init() {
-        DingTalkUtil.config = config2;
         Assert.notBlank(config.getToken(), "请配置机器人token");
         Assert.notNull(config.getSecret(), "请配置机器人密钥");
         Assert.notNull(config.getProjectName(), "请配置项目名");
@@ -65,12 +72,12 @@ public class DingTalkUtil {
      * 加密
      *
      * @param timestamp 时间戳
+     * @return void
      * @author bigtian
      * @since 6.0
-     * @return  void
      */
 
-    public static String signature(Long timestamp) {
+    public String signature(Long timestamp) {
         try {
             String secret = config.getSecret();
             String stringToSign = timestamp + "\n" + secret;
@@ -91,7 +98,7 @@ public class DingTalkUtil {
      * @since 6.0
      */
 
-    public static void sendErrorMd(Long id, List<String> list) {
+    public void sendErrorMd(Long id, List<String> list) {
         try {
             DingTalkClient client = getDingTalkClient();
             OapiRobotSendRequest request = new OapiRobotSendRequest();
@@ -117,10 +124,10 @@ public class DingTalkUtil {
         }
     }
 
-    private static DingTalkClient getDingTalkClient() {
+    private DingTalkClient getDingTalkClient() {
         if (StrUtil.isBlank(urlPrefix)) {
             HttpServletRequest request = RequestUtils.getRequest();
-            urlPrefix = request.getRequestURL().toString().replace(request.getRequestURI(), "") + URL;
+            urlPrefix = request.getRequestURL().toString().replace(request.getRequestURI(), "") + SystemConstant.URL;
         }
         Long timestamp = System.currentTimeMillis();
         String token = config.getToken();
@@ -129,7 +136,9 @@ public class DingTalkUtil {
         return client;
     }
 
-    public static void sendHandledMd(TExceptionInfo info) {
+
+    @Override
+    public void sendHandledMessage(TExceptionInfo info) {
         try {
             DingTalkClient client = getDingTalkClient();
             OapiRobotSendRequest request = new OapiRobotSendRequest();
@@ -165,7 +174,7 @@ public class DingTalkUtil {
      * @since 6.0
      */
 
-    private static OapiRobotSendRequest.At setAtList() {
+    private OapiRobotSendRequest.At setAtList() {
         OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
         String[] managers = Optional.ofNullable(config.getManagers())
                 .map(el -> el.split(","))
@@ -188,7 +197,7 @@ public class DingTalkUtil {
      * @author bigtian
      * @since 6.0
      */
-    private static OapiRobotSendRequest.At setAtList(List<String> authorList) {
+    private OapiRobotSendRequest.At setAtList(List<String> authorList) {
         OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
         String[] managers = Optional.ofNullable(config.getManagers())
                 .map(el -> el.split(","))
@@ -226,12 +235,11 @@ public class DingTalkUtil {
      * @author bigtian
      * @since 6.0
      */
-    public static String assembleUsers(OapiRobotSendRequest.At at) {
+    public String assembleUsers(OapiRobotSendRequest.At at) {
         Boolean isAtAll = Optional.ofNullable(at.getIsAtAll()).orElse(false);
         if (isAtAll) {
             return "@全体人员";
         }
-
         List<String> atUserIds = at.getAtUserIds();
         StringBuilder builder = new StringBuilder();
         if (CollUtil.isNotEmpty(atUserIds)) {

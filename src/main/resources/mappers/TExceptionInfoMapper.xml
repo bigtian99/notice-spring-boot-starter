@@ -12,6 +12,7 @@
         <result column="handled_time" jdbcType="TIMESTAMP" property="handledTime"/>
         <result column="handled_man" jdbcType="VARCHAR" property="handledMan"/>
         <result column="cause" jdbcType="VARCHAR" property="cause"/>
+        <result column="params" jdbcType="VARCHAR" property="params"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -68,6 +69,9 @@
             <if test="handledMan != null">
                 handled_man,
             </if>
+            <if test="params != null">
+                params,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="url != null">
@@ -87,6 +91,9 @@
             </if>
             <if test="handledMan != null">
                 #{handledMan,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">
+                #{params,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
