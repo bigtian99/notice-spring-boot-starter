@@ -17,6 +17,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ import java.util.*;
  */
 @Service
 @Slf4j
+@ConditionalOnProperty(value = "notice.enterprise-we-chat.key")
 public class EnterpriseWeChatServiceImpl implements INoticeService {
     @Autowired
     private ExceptionNoticeConfig config;

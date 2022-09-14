@@ -16,6 +16,7 @@ import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.taobao.api.ApiException;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,9 @@ import java.util.*;
  * @Description: 钉钉消息发送类
  * @date 2022/9/1210:38
  */
-//@Service
-//@Primary
+@Service
+@Primary
+@ConditionalOnProperty(value = "notice.dingtalk.secret")
 public class DingTalkServiceImpl implements INoticeService {
     @Autowired
     private ExceptionNoticeConfig config;

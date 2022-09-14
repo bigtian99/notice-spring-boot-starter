@@ -13,6 +13,7 @@
         <result column="handled_man" jdbcType="VARCHAR" property="handledMan"/>
         <result column="cause" jdbcType="VARCHAR" property="cause"/>
         <result column="params" jdbcType="VARCHAR" property="params"/>
+        <result column="headers" jdbcType="VARCHAR" property="headers"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -23,7 +24,9 @@
         handled,
         handled_time,
         handled_man,
-        cause
+        cause,
+        params,
+        headers
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -42,9 +45,9 @@
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into t_exception_info (url, content, create_time,
-                                      handled, handled_time, handled_man)
+                                      handled, handled_time, handled_man,params,headers)
         values (#{url,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-                #{handled,jdbcType=VARCHAR}, #{handledTime,jdbcType=TIMESTAMP}, #{handledMan,jdbcType=VARCHAR})
+                #{handled,jdbcType=VARCHAR}, #{handledTime,jdbcType=TIMESTAMP}, #{handledMan,jdbcType=VARCHAR},#{params},#{headers})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id"
             parameterType="club.bigtian.notice.domain.TExceptionInfo" useGeneratedKeys="true">

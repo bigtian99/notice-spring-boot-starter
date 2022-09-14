@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,6 +74,11 @@ public class ExceptionNoticeConfig {
     private long timeout = 5;
 
     /**
+     * 需要存放到数据库的请求头配置
+     */
+    private List<String> headers;
+
+    /**
      * 钉钉配置内部类
      *
      * @author bigtian
@@ -92,12 +98,18 @@ public class ExceptionNoticeConfig {
 
     }
 
+    /**
+     * 企业微信配置
+     *
+     * @author bigtian
+     * @since 6.0
+     */
     @Data
     public static class EnterpriseWeChat {
         /**
          * 企业微信机器人webhook key
          */
-        private String key="a04ac171-42b3-4a3e-91c4-ed38d6de4426";
+        private String key;
 
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 /**
  * @author bigtian
@@ -15,7 +14,7 @@ import org.springframework.core.annotation.Order;
 @Configuration
 @ComponentScan(basePackages = {"club.bigtian.notice.*"})
 @MapperScan(basePackages = {"club.bigtian.notice.mapper"})
-public class DingTalkAutoConfiguration {
+public class ExceptionNoticeAutoConfiguration {
 
 
     @Bean

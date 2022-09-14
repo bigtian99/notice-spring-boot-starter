@@ -1,6 +1,6 @@
 package club.bigtian.notice.aop;
 
-import club.bigtian.notice.anno.DingTalk;
+import club.bigtian.notice.anno.NoticeMessage;
 import club.bigtian.notice.config.ExceptionNoticeConfig;
 import club.bigtian.notice.constant.SystemConstant;
 import club.bigtian.notice.domain.TExceptionInfo;
@@ -9,6 +9,8 @@ import club.bigtian.notice.service.INoticeService;
 import club.bigtian.notice.service.ISystemCacheService;
 import club.bigtian.notice.utils.ExceptionUtils;
 import club.bigtian.notice.utils.RequestUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -63,7 +65,7 @@ public class ExceptionHandlerAdvice {
         }
 
         MethodSignature signature = (MethodSignature) point.getSignature();
-        saveExceptionInfo(ex, signature.getMethod());
+        saveExceptionInfo(ex, point, signature.getMethod());
     }
 
     /**
@@ -76,9 +78,7 @@ public class ExceptionHandlerAdvice {
      */
     private boolean excludeException(Exception ex) {
         String packageName = ex.getClass().getPackage().getName();
-        Set<String> packageSet = Optional.ofNullable(config.getExcludePacket())
-                .map(el -> new HashSet<>(Arrays.asList(el.split(","))))
-                .orElse(new HashSet<>());
+        Set<String> packageSet = Optional.ofNullable(config.getExcludePacket()).map(el -> new HashSet<>(Arrays.asList(el.split(",")))).orElse(new HashSet<>());
         //验证是否是排除的异常
         if (packageSet.contains(packageName)) {
             return true;
@@ -86,9 +86,7 @@ public class ExceptionHandlerAdvice {
         //排除特定异常
         String exceptionFullPath = ex.getClass().getName();
 
-        Set<String> exceptionFullPathSet = Optional.ofNullable(config.getExcludeException())
-                .map(el -> new HashSet<>(Arrays.asList(el.split(","))))
-                .orElse(new HashSet<>());
+        Set<String> exceptionFullPathSet = Optional.ofNullable(config.getExcludeException()).map(el -> new HashSet<>(Arrays.asList(el.split(",")))).orElse(new HashSet<>());
         return exceptionFullPathSet.contains(exceptionFullPath);
     }
 
@@ -98,14 +96,16 @@ public class ExceptionHandlerAdvice {
      * @author bigtian
      * @since 6.0
      */
-    private void saveExceptionInfo(Throwable e, Method method) {
+    private void saveExceptionInfo(Throwable e, JoinPoint point, Method method) {
         HttpServletRequest request = RequestUtils.getRequest();
+
         TExceptionInfo info = TExceptionInfo.builder()
                 .url(request.getRequestURI())
                 .createTime(new Date())
                 .handled(SystemConstant.STATUS_N)
                 .content(ExceptionUtils.getExceptionMsg(e))
-                .params(JSON.toJSONString(request.getParameterMap()))
+                .params(JSON.toJSONString(point.getArgs()))
+                .headers(getHeadersString())
                 .build();
 
         int flag = exceptionInfoService.insert(info);
@@ -118,6 +118,30 @@ public class ExceptionHandlerAdvice {
     }
 
     /**
+     * 获取请求头
+     *
+     * @return
+     * @author bigtian
+     * @since 6.0
+     */
+
+    public String getHeadersString() {
+        List<String> headersList = config.getHeaders();
+        if (CollUtil.isEmpty(headersList)) {
+            return "";
+        }
+        Map<String, Object> headers = new HashMap<>();
+        HttpServletRequest request = RequestUtils.getRequest();
+        for (String key : headersList) {
+            String header = request.getHeader(key);
+            if (StrUtil.isNotBlank(header)) {
+                headers.put(key, header);
+            }
+        }
+        return JSON.toJSONString(headers);
+    }
+
+    /**
      * 获取作者列表
      *
      * @param method
@@ -127,9 +151,9 @@ public class ExceptionHandlerAdvice {
      */
     public static List<String> getAuthorList(Method method) {
         List<String> list = new ArrayList<>();
-        DingTalk dingTalk = method.getAnnotation(DingTalk.class);
-        if (Objects.nonNull(dingTalk)) {
-            list.addAll(Arrays.asList(dingTalk.author()));
+        NoticeMessage noticeMessage = method.getAnnotation(NoticeMessage.class);
+        if (Objects.nonNull(noticeMessage)) {
+            list.addAll(Arrays.asList(noticeMessage.author()));
         }
         return list;
     }

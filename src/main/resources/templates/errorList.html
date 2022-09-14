@@ -57,62 +57,24 @@
     <div class="layui-col-md4" id="all">
         <div class="layui-panel" style="background-color:#845EC2">
             <div class="text">总异常</div>
-            <div class="count" th:text="${groupCount.N+groupCount.Y}"></div>
+            <div class="count" th:text="${groupCount.getOrDefault('Y',0)+groupCount.getOrDefault('N',0)}"></div>
         </div>
     </div>
     <div class="layui-col-md4 click" id="no">
         <div class="layui-panel " style="background-color:#D65DB1">
             <div class="text">待处理</div>
-            <div class="count" th:text="${groupCount.N}"></div>
+            <div class="count" th:text="${groupCount.getOrDefault('N',0)}"></div>
 
         </div>
     </div>
     <div class="layui-col-md4 click" id="yes">
         <div class="layui-panel" style="background-color:#00C9A7">
             <div class="text">已处理</div>
-            <div class="count" th:text="${groupCount.Y}"></div>
+            <div class="count" th:text="${groupCount.getOrDefault('Y',0)}"></div>
 
         </div>
     </div>
 </div>
-<!--<table class="layui-table">-->
-<!--    <colgroup>-->
-<!--        <col width="150">-->
-<!--        <col width="200">-->
-<!--        <col>-->
-<!--    </colgroup>-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th>序号</th>-->
-<!--        <th>请求url</th>-->
-<!--        <th>是否处理</th>-->
-<!--        <th>产生时间</th>-->
-<!--        <th>处理人</th>-->
-<!--        <th>处理时间</th>-->
-<!--        <th>导致原因</th>-->
-<!--        <th>操作</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr th:each="item,itemStat : ${ list}">-->
-<!--        <td th:text="${itemStat.index+1}"></td>-->
-<!--        <td th:text="${item.url}"></td>-->
-<!--        <td th:text="${item.handled=='Y'?'是':'否'}" th:style="'color:'+${item.handled=='Y'?'green':'red'}"></td>-->
-<!--        <td th:text="${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>-->
-<!--        <td th:text="${item.handledMan}"></td>-->
-<!--        <td th:text="${#dates.format(item.handledTime, 'yyyy-MM-dd HH:mm:ss')}"></td>-->
-<!--        <td th:text="${item.cause}"></td>-->
-<!--        <td>-->
-<!--            <a th:href="'/exception/selectOne?id='+${item.id}" class="layui-btn">详情</a>-->
-<!--        </td>-->
-<!--    </tr>-->
-
-<!--    </tbody>-->
-<!--</table>-->
-
-<!--<div class="page">-->
-<!--    <div id="page"></div>-->
-<!--</div>-->
 <table id="demo" lay-filter="test"></table>
 
 <script th:src="@{/layui/layui.js}"></script>
@@ -137,6 +99,7 @@
                     {field: 'id', title: '序号'},
                     {field: 'url', title: '请求url'},
                     {field: 'params', title: '请求参数'},
+                    {field: 'headers', title: '请求头'},
                     {field: 'handled', title: '是否处理', templet: '#handled'},
                     {field: 'createTime', title: '产生时间', templet: '#createTime'},
                     {field: 'handledMan', title: '处理人'},
