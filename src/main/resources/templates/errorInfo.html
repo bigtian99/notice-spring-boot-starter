@@ -62,7 +62,7 @@
             <label class="layui-form-label">导致原因</label>
             <div class="layui-input-block">
 
-                <textarea lay-verify="required" name="cause" placeholder="请输入导致原因"
+                <textarea id="cause" lay-verify="required" name="cause" placeholder="请输入导致原因"
                           class="layui-textarea"></textarea>
             </div>
         </div>
@@ -112,12 +112,13 @@
         form.on('submit(submit)', function (data) {
             var id = [[${id}]]
             var data = data.field;
+            console.log()
             localStorage.setItem("name", data.handledMan)
             data.id = id
             $.ajax({
                 type: "POST",
                 url: '/exception/handler',
-                data: JSON.stringify(data),
+                data: JSON.stringify(data).replaceAll("\\n", "\\r\\n"),
                 contentType: "application/json;charset=UTF-8",
                 success: function (data) {
                     if (data) {
