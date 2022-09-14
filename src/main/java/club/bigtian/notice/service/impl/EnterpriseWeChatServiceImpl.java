@@ -125,9 +125,10 @@ public class EnterpriseWeChatServiceImpl implements INoticeService {
                         "> 处理人：{}\n\n " +
                         "> 审查人：{}\n\n " +
                         "> 修复时间：{} \n\n" +
+                        "> 环境：<font  color=\"green\"> {} </font> \n\n" +
                         "> 导致原因：\r\n{}\n\n" +
                         "> 异常堆栈：[查看详情]({}) \n\n"
-                , config.getSuccessTitle(), config.getProjectName(), info.getId(), info.getHandledMan(), users, DateUtil.format(info.getHandledTime(), "yyyy-MM-dd HH:mm:ss"), info.getCause(), urlPrefix + info.getId());
+                , config.getSuccessTitle(), config.getProjectName(), info.getId(), info.getHandledMan(), users, DateUtil.format(info.getHandledTime(), "yyyy-MM-dd HH:mm:ss"), config.getEnvs().get(activeProfile),info.getCause(), urlPrefix + info.getId());
         sendNotice(contents);
     }
 
