@@ -1,12 +1,12 @@
 package club.bigtian.notice.aop;
 
 import club.bigtian.notice.anno.DingTalk;
-import club.bigtian.notice.config.DingTalkConfig;
+import club.bigtian.notice.config.ExceptionNoticeConfig;
 import club.bigtian.notice.constant.SystemConstant;
 import club.bigtian.notice.domain.TExceptionInfo;
+import club.bigtian.notice.service.ExceptionInfoService;
 import club.bigtian.notice.service.INoticeService;
 import club.bigtian.notice.service.ISystemCacheService;
-import club.bigtian.notice.service.TExceptionInfoService;
 import club.bigtian.notice.utils.ExceptionUtils;
 import club.bigtian.notice.utils.RequestUtils;
 import com.alibaba.fastjson2.JSON;
@@ -31,12 +31,12 @@ import java.util.*;
 @Slf4j
 public class ExceptionHandlerAdvice {
     @Autowired
-    private TExceptionInfoService exceptionInfoService;
+    private ExceptionInfoService exceptionInfoService;
 
     @Autowired
     private INoticeService noticeService;
     @Autowired
-    private DingTalkConfig config;
+    private ExceptionNoticeConfig config;
 
     @Autowired
     private ISystemCacheService isystemCacheService;

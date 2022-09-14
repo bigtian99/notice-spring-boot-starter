@@ -1,6 +1,6 @@
 package club.bigtian.notice.service.impl;
 
-import club.bigtian.notice.config.DingTalkConfig;
+import club.bigtian.notice.config.ExceptionNoticeConfig;
 import club.bigtian.notice.constant.SystemConstant;
 import club.bigtian.notice.domain.TExceptionInfo;
 import club.bigtian.notice.service.INoticeService;
@@ -32,11 +32,11 @@ import java.util.*;
  * @Description: 钉钉消息发送类
  * @date 2022/9/1210:38
  */
-@Service
-@Primary
+//@Service
+//@Primary
 public class DingTalkServiceImpl implements INoticeService {
     @Autowired
-    private DingTalkConfig config;
+    private ExceptionNoticeConfig config;
 
     @Autowired
     private ApplicationContext context;
@@ -52,8 +52,10 @@ public class DingTalkServiceImpl implements INoticeService {
 
     @PostConstruct
     public void init() {
-        Assert.notBlank(config.getToken(), "请配置机器人token");
-        Assert.notNull(config.getSecret(), "请配置机器人密钥");
+        ExceptionNoticeConfig.DingTalkConfig dingtalk = config.getDingtalk();
+        Assert.notNull(dingtalk, "请配置钉钉相关配置");
+        Assert.notBlank(dingtalk.getToken(), "请配置机器人token");
+        Assert.notNull(dingtalk.getSecret(), "请配置机器人密钥");
         Assert.notNull(config.getProjectName(), "请配置项目名");
         String[] activeProfiles = context.getEnvironment().getActiveProfiles();
         if (ArrayUtil.isEmpty(activeProfiles)) {
@@ -79,7 +81,7 @@ public class DingTalkServiceImpl implements INoticeService {
 
     public String signature(Long timestamp) {
         try {
-            String secret = config.getSecret();
+            String secret = config.getDingtalk().getSecret();
             String stringToSign = timestamp + "\n" + secret;
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
@@ -130,9 +132,9 @@ public class DingTalkServiceImpl implements INoticeService {
             urlPrefix = request.getRequestURL().toString().replace(request.getRequestURI(), "") + SystemConstant.URL;
         }
         Long timestamp = System.currentTimeMillis();
-        String token = config.getToken();
+        String token = config.getDingtalk().getToken();
         String signature = signature(timestamp);
-        DingTalkClient client = new DefaultDingTalkClient(StrUtil.format("https://oapi.dingtalk.com/robot/send?access_token={}&timestamp={}&sign={}", token, timestamp, signature));
+        DingTalkClient client = new DefaultDingTalkClient(StrUtil.format(SystemConstant.DING_TALK_URL, token, timestamp, signature));
         return client;
     }
 

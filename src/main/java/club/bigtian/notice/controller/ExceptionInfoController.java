@@ -1,19 +1,16 @@
 package club.bigtian.notice.controller;
 
-import club.bigtian.notice.anno.DingTalk;
 import club.bigtian.notice.constant.SystemConstant;
 import club.bigtian.notice.domain.TExceptionInfo;
 import club.bigtian.notice.domain.dto.PageListDto;
 import club.bigtian.notice.service.INoticeService;
-import club.bigtian.notice.service.ISystemCacheService;
-import club.bigtian.notice.service.TExceptionInfoService;
+import club.bigtian.notice.service.ExceptionInfoService;
 import cn.hutool.core.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +23,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/exception")
-public class TExceptionInfoController {
+public class ExceptionInfoController {
     /**
      * 服务对象
      */
     @Autowired
-    private TExceptionInfoService exceptionInfoService;
+    private ExceptionInfoService exceptionInfoService;
 
     @Autowired
     private INoticeService noticeService;

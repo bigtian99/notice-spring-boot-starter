@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @author bigtian
  */
-public interface TExceptionInfoService {
+public interface ExceptionInfoService {
 
 
     int deleteByPrimaryKey(Long id);

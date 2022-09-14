@@ -1,12 +1,11 @@
 package club.bigtian.notice.service.impl;
 
-import club.bigtian.notice.config.DingTalkConfig;
+import club.bigtian.notice.config.ExceptionNoticeConfig;
 import club.bigtian.notice.service.ISystemCacheService;
 import club.bigtian.notice.utils.RequestUtils;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,15 +14,15 @@ import java.util.concurrent.TimeUnit;
  * @Description: 系统缓存
  * @date 2022/9/1211:55
  */
-@Service
 public class ISystemCacheServiceImpl implements ISystemCacheService {
     @Autowired
-    private DingTalkConfig config;
+    private ExceptionNoticeConfig config;
 
     private static final ExpiringMap<String, String> SYSTEM_CACHE_MAP = ExpiringMap.builder()
             .variableExpiration()
             .expirationPolicy(ExpirationPolicy.CREATED)
             .build();
+
 
     /**
      * 过期时间
@@ -37,7 +36,7 @@ public class ISystemCacheServiceImpl implements ISystemCacheService {
 
 
     /**
-     * 把瓦尔
+     * 把请求路径缓存起来
      *
      * @return {@link String}
      */

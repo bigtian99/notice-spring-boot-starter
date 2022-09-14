@@ -22,6 +22,14 @@ public class SystemConstant {
     public static final String URL = "/exception/selectOne?id=";
 
     /**
+     * 企业微信url
+     */
+    public static final String ENTERPRISE_WECHAT_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={}";
+    /**
+     * 钉钉url
+     */
+    public static final String DING_TALK_URL = "https://oapi.dingtalk.com/robot/send?access_token={}&timestamp={}&sign={}";
+    /**
      * 需要监听的包路径,默认监听RestController、Controller标注的类
      */
     public static final String PACKET = "@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)";
@@ -78,4 +86,12 @@ public class SystemConstant {
      * 页面：错误列表
      */
     public static final String ERROR_LIST = "errorList";
+    /**
+     * 企业微信消息推送：markdown
+     */
+    public static final String MARKDOWN = "markdown";
+    /**
+     * 错误代码
+     */
+    public static final String ERR_CODE = "errcode";
 }

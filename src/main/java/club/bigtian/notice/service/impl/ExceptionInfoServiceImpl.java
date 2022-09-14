@@ -3,11 +3,10 @@ package club.bigtian.notice.service.impl;
 import club.bigtian.notice.domain.TExceptionInfo;
 import club.bigtian.notice.domain.dto.PageListDto;
 import club.bigtian.notice.mapper.TExceptionInfoMapper;
-import club.bigtian.notice.service.TExceptionInfoService;
+import club.bigtian.notice.service.ExceptionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
  * @author bigtian
  */
 @Service
-public class TExceptionInfoServiceImpl implements TExceptionInfoService {
+public class ExceptionInfoServiceImpl implements ExceptionInfoService {
 
     @Autowired
     private TExceptionInfoMapper tExceptionInfoMapper;

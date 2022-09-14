@@ -9,21 +9,20 @@ import java.util.Map;
 /**
  * @author bigtian
  */
-@ConfigurationProperties(prefix = "notice.dingtalk")
+@ConfigurationProperties(prefix = "notice")
 @Configuration
 @Data
-public class DingTalkConfig {
-    /**
-     * 目前只支持加密方式
-     */
-    private String secret;
+public class ExceptionNoticeConfig {
+
 
     /**
-     * 钉钉机器人token
+     * 钉钉配置
      */
-    private String token;
-
-
+    private DingTalkConfig dingtalk;
+    /**
+     * 企业微信配置
+     */
+    private EnterpriseWeChat enterpriseWeChat;
     /**
      * 异常标题
      */
@@ -73,4 +72,33 @@ public class DingTalkConfig {
      */
     private long timeout = 5;
 
+    /**
+     * 钉钉配置内部类
+     *
+     * @author bigtian
+     * @since 6.0
+     */
+    @Data
+    public static class DingTalkConfig {
+        /**
+         * 目前只支持加密方式
+         */
+        private String secret;
+
+        /**
+         * 钉钉机器人token
+         */
+        private String token;
+
+    }
+
+    @Data
+    public static class EnterpriseWeChat {
+        /**
+         * 企业微信机器人webhook key
+         */
+        private String key="a04ac171-42b3-4a3e-91c4-ed38d6de4426";
+
+    }
 }
+
